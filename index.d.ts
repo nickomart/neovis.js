@@ -19,7 +19,7 @@ export interface IRelationshipConfig {
     thickness?: string;
     caption?: boolean;
     color?: string | IVisColor;
-    colorFn?: (edge: any) => string | IVisColor;
+    colorFn?: (relationship: any) => string | IVisColor;
 }
 
 export interface INeovisConfig {
@@ -42,13 +42,14 @@ export interface INeovisConfig {
     console_debug?: boolean;
     encrypted?: "ENCRYPTION_OFF" | "ENCRYPTION_ON";
     trust?: "TRUST_ALL_CERTIFICATES" | "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES";
-}
+    customEdgesScalingFn?: (min: number, max: number, total: number, value: number) => number;
+} 
 
 declare class Neovis {
     constructor(config: INeovisConfig);
     render(): void;
     clearNetwork(): void;
-    registerOnEvent(eventType: ENeovisEvent | string, handler: (event: any) => void): void;
+    registerOnEvent(eventType: string, handler: (event: any) => void): void;
     reinit(config: INeovisConfig): void;
     reload(): void;
     stabilize(): void;

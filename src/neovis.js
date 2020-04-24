@@ -213,7 +213,6 @@ export default class NeoVis {
 				edge.color = nodeTypeConfig.color;
 			}
 		}
-		
 
 		// hover tooltip. show all properties in the format <strong>key:</strong> value
 		edge.title = '';
@@ -346,7 +345,7 @@ export default class NeoVis {
 							arrows: {
 								to: {enabled: this._config.arrows || false} // FIXME: handle default value
 							},
-							length: 200,							
+							length: 200,
 						},
 						layout: {
 							improvedLayout: false,
@@ -374,6 +373,12 @@ export default class NeoVis {
 							}
 						}
 					};
+
+					if (this._config.customEdgesScalingFn) {
+						options.edges.scaling = {
+							customScalingFunction: this._config.customEdgesScalingFn
+						}
+					}
 
 					const container = this._container;
 					this._data = {
