@@ -1,5 +1,12 @@
 export const NEOVIS_DEFAULT_CONFIG: unique symbol;
 
+export interface IVisColor {
+    color?: string;
+    highlight?: string;
+    hover?: string;
+    opacity?: number;
+}
+
 export interface ILabelConfig {
     caption?: string;
     size?: string;
@@ -7,9 +14,12 @@ export interface ILabelConfig {
     sizeCypher?: string;
 }
 
+// https://almende.github.io/vis/docs/network/edges.html#
 export interface IRelationshipConfig {
     thickness?: string;
     caption?: boolean;
+    color?: string | IVisColor;
+    colorFn?: (edge: any) => string | IVisColor;
 }
 
 export interface INeovisConfig {
@@ -38,7 +48,7 @@ declare class Neovis {
     constructor(config: INeovisConfig);
     render(): void;
     clearNetwork(): void;
-    registerOnEvent(eventType: string, handler: (event: any) => void): void;
+    registerOnEvent(eventType: ENeovisEvent | string, handler: (event: any) => void): void;
     reinit(config: INeovisConfig): void;
     reload(): void;
     stabilize(): void;

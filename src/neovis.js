@@ -203,7 +203,17 @@ export default class NeoVis {
 		let edge = {};
 		edge.id = r.identity.toInt();
 		edge.from = r.start.toInt();
-		edge.to = r.end.toInt();
+		edge.to = r.end.toInt();		
+		
+		if (nodeTypeConfig) {
+			if ('colorFn' in nodeTypeConfig) {
+				edge.color = nodeTypeConfig.colorFn(r);
+			}
+			else if ('color' in nodeTypeConfig) {
+				edge.color = nodeTypeConfig.color;
+			}
+		}
+		
 
 		// hover tooltip. show all properties in the format <strong>key:</strong> value
 		edge.title = '';
@@ -336,7 +346,7 @@ export default class NeoVis {
 							arrows: {
 								to: {enabled: this._config.arrows || false} // FIXME: handle default value
 							},
-							length: 200
+							length: 200,							
 						},
 						layout: {
 							improvedLayout: false,
@@ -389,7 +399,7 @@ export default class NeoVis {
 					//     }
 					// );
 					this._network = new vis.Network(container, this._data, options);
-					this._consoleLog('completed');
+					this._consoleLog('completed');					
 					setTimeout(
 						() => {
 							this._network.stopSimulation();
