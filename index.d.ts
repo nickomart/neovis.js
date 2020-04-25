@@ -1,5 +1,12 @@
 export const NEOVIS_DEFAULT_CONFIG: unique symbol;
 
+export const enum NeovisEvent {
+    CompletionEvent = 'completed',
+    ClickNodeEvent = 'clickNode',
+    ClickEdgeEvent = 'clickEdge',
+    ErrorEvent = 'error'
+}
+
 export interface IVisColor {
     color?: string;
     highlight?: string;
@@ -7,11 +14,13 @@ export interface IVisColor {
     opacity?: number;
 }
 
+// https://visjs.github.io/vis-network/docs/network/nodes.html
 export interface ILabelConfig {
     caption?: string;
     size?: string;
     community?: string;
     sizeCypher?: string;
+    shape?: string;
 }
 
 // https://almende.github.io/vis/docs/network/edges.html#
@@ -43,13 +52,14 @@ export interface INeovisConfig {
     encrypted?: "ENCRYPTION_OFF" | "ENCRYPTION_ON";
     trust?: "TRUST_ALL_CERTIFICATES" | "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES";
     customEdgesScalingFn?: (min: number, max: number, total: number, value: number) => number;
+    cacheProperties?: boolean;
 } 
 
 declare class Neovis {
     constructor(config: INeovisConfig);
     render(): void;
     clearNetwork(): void;
-    registerOnEvent(eventType: string, handler: (event: any) => void): void;
+    registerOnEvent(eventType: NeovisEvent, handler: (event: any) => void): void;
     reinit(config: INeovisConfig): void;
     reload(): void;
     stabilize(): void;

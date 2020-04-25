@@ -15,6 +15,9 @@ export default class NeoVis {
 	_network = null;
 	_events = new EventController();
 
+	_nodesProperties = {};
+	_edgesProperties = {};
+
 	/**
 	 *
 	 * @constructor
@@ -109,12 +112,16 @@ export default class NeoVis {
 		const sizeKey = labelConfig && labelConfig['size'];
 		const sizeCypher = labelConfig && labelConfig['sizeCypher'];
 		const communityKey = labelConfig && labelConfig['community'];
+		const shape = labelConfig && labelConfig['shape'];
 
 		const title_properties = (
 			labelConfig && labelConfig.title_properties
 		) || Object.keys(neo4jNode.properties);
 
 		node.id = neo4jNode.identity.toInt();
+		if (shape) {
+			node.shape = shape;
+		}
 
 		// node size
 
@@ -186,6 +193,9 @@ export default class NeoVis {
 				node.title += this.propertyToString(key, neo4jNode.properties[key]);
 			}
 		}
+		if (this._config && this._config.cacheProperties) {
+			this._nodesProperties[node.id] = neo4jNode.properties;
+		}
 		return node;
 	}
 
@@ -244,6 +254,10 @@ export default class NeoVis {
 			edge.label = r.properties[captionKey] || '';
 		} else {
 			edge.label = r.type;
+		}
+
+		if (this._config && this._config.cacheProperties) {
+			this._edgesProperties[edge.id] = r.properties;
 		}
 
 		return edge;
@@ -417,10 +431,16 @@ export default class NeoVis {
 					this._network.on('click', function (params) {
 						if (params.nodes.length > 0) {
 							let nodeId = this.getNodeAt(params.pointer.DOM);
-							neoVis._events.generateEvent(ClickNodeEvent, {nodeId: nodeId, node: neoVis._nodes[nodeId]});
+							neoVis._events.generateEvent(ClickNodeEvent, {
+								nodeId,
+								node: neoVis._config && neoVis._config.cacheProperties ? neoVis._nodesProperties[nodeId] : neoVis._nodes[nodeId],
+							});
 						} else if (params.edges.length > 0) {
 							let edgeId = this.getEdgeAt(params.pointer.DOM);
-							neoVis._events.generateEvent(ClickEdgeEvent, {edgeId: edgeId, edge: neoVis._edges[edgeId]});
+							neoVis._events.generateEvent(ClickEdgeEvent, {
+								edgeId,
+								edge: neoVis._config && neoVis._config.cacheProperties ? neoVis._edgesProperties[edgeId] : neoVis._edges[edgeId]
+							});
 						}
 					});
 				},
@@ -438,6 +458,8 @@ export default class NeoVis {
 		this._nodes = {};
 		this._edges = {};
 		this._network.setData([]);
+		this._nodesProperties = {};
+		this._edgesProperties = {};
 	}
 
 
