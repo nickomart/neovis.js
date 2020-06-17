@@ -384,7 +384,12 @@ export default class NeoVis {
 							stabilization: {
 								iterations: 200,
 								fit: true
-							}
+							},
+							repulsion: {
+								nodeDistance: 150,
+								springConstant: 0.0005
+							},
+							solver: 'repulsion'
 						}
 					};
 

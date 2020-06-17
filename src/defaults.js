@@ -27,12 +27,7 @@ const defaults = {
 		physics: {
 			barnesHut: {
 				damping: 0.1
-			},
-			repulsion: {
-				nodeDistance: 150,
-				springConstant: 0.0005
-			},
-			solver: 'repulsion'
+			}
 		},
 		nodes: {
 			mass: 4,
