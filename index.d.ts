@@ -21,6 +21,8 @@ export interface ILabelConfig {
     community?: string;
     sizeCypher?: string;
     shape?: string;
+    imageUrlPath?: string;
+    imageExt?: string;
 }
 
 // https://almende.github.io/vis/docs/network/edges.html#
@@ -54,7 +56,7 @@ export interface INeovisConfig {
     trust?: "TRUST_ALL_CERTIFICATES" | "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES";
     customEdgesScalingFn?: (min: number, max: number, total: number, value: number) => number;
     cacheProperties?: boolean;
-} 
+}
 
 declare class Neovis {
     constructor(config: INeovisConfig);

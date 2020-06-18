@@ -113,6 +113,8 @@ export default class NeoVis {
 		const sizeCypher = labelConfig && labelConfig['sizeCypher'];
 		const communityKey = labelConfig && labelConfig['community'];
 		const shape = labelConfig && labelConfig['shape'];
+		const imageUrlPath = labelConfig && labelConfig['imageUrlPath'];
+		const imageExt = labelConfig && labelConfig['imageExt'];
 
 		const title_properties = (
 			labelConfig && labelConfig.title_properties
@@ -121,6 +123,9 @@ export default class NeoVis {
 		node.id = neo4jNode.identity.toInt();
 		if (shape) {
 			node.shape = shape;
+			if (imageUrlPath && imageExt && ('image' === shape || 'circularImage' === shape)) {
+				node.image = `${imageUrlPath}${neo4jNode.properties['id']}${imageExt}`;
+			}
 		}
 
 		// node size
@@ -213,8 +218,8 @@ export default class NeoVis {
 		let edge = {};
 		edge.id = r.identity.toInt();
 		edge.from = r.start.toInt();
-		edge.to = r.end.toInt();		
-		
+		edge.to = r.end.toInt();
+
 		if (nodeTypeConfig) {
 			if ('colorFn' in nodeTypeConfig) {
 				edge.color = nodeTypeConfig.colorFn(r);
@@ -266,7 +271,7 @@ export default class NeoVis {
 
 		return edge;
 	}
-    
+
 	propertyToString(key, value) {
 		if (Array.isArray(value) && value.length > 1) {
 			let out = `<strong>${key}:</strong><br /><ul>`;
@@ -431,7 +436,7 @@ export default class NeoVis {
 					//     }
 					// );
 					this._network = new vis.Network(container, this._data, options);
-					this._consoleLog('completed');					
+					this._consoleLog('completed');
 					setTimeout(
 						() => {
 							this._network.stopSimulation();
