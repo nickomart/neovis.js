@@ -226,9 +226,13 @@ export default class NeoVis {
 
 		// hover tooltip. show all properties in the format <strong>key:</strong> value
 		edge.title = '';
-		for (let key in r.properties) {
-			if (r.properties.hasOwnProperty(key)) {
-				edge['title'] += this.propertyToString(key, r.properties[key]);
+		if ('toolTipFn' in nodeTypeConfig) {
+			edge['title'] = nodeTypeConfig.toolTipFn(r);
+		} else {
+			for (let key in r.properties) {
+				if (r.properties.hasOwnProperty(key)) {
+					edge['title'] += this.propertyToString(key, r.properties[key]);
+				}
 			}
 		}
 
@@ -390,6 +394,10 @@ export default class NeoVis {
 								springConstant: 0.0005
 							},
 							solver: 'repulsion'
+						},
+						interaction: {
+							hover: true,
+							multiselect: true
 						}
 					};
 

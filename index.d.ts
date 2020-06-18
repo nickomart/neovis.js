@@ -29,6 +29,7 @@ export interface IRelationshipConfig {
     caption?: boolean;
     color?: string | IVisColor;
     colorFn?: (relationship: any) => string | IVisColor;
+    toolTipFn?: (relationship: any) => string;
 }
 
 export interface INeovisConfig {
